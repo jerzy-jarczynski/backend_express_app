@@ -10,6 +10,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.static(path.join(__dirname, '/public')));
+
 app.get('/', (req, res) => {
   res.show('index.html');
 });
@@ -28,14 +30,6 @@ app.get('/info', (req, res) => {
 
 app.get('/history', (req, res) => {
   res.show('history.html');
-});
-
-app.get('/style.css', (req, res) => {
-  res.sendFile(path.join(__dirname, '/style.css'));
-});
-
-app.get('/test.png', (req, res) => {
-  res.sendFile(path.join(__dirname, '/test.png'));
 });
 
 app.use((req, res) => {
