@@ -1,7 +1,11 @@
 const express = require('express');
 const path = require('path');
+const hbs = require('express-handlebars');
 
 const app = express();
+
+app.engine('hbs', hbs());
+app.set('view engine', 'hbs');
 
 app.use((req, res, next) => {
   res.show = (name) => {
@@ -35,7 +39,7 @@ app.get('/history', (req, res) => {
 app.get('/hello/:name', (req, res) => {
   const reqName = req.params.name;
   const uppName = reqName.charAt(0).toUpperCase() + reqName.slice(1);
-  res.send(`Witaj ${uppName}`);
+  res.render('hello', { layout: false, name: uppName });
 });
 
 app.use((req, res) => {
