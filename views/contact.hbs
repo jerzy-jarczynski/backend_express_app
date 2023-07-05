@@ -2,9 +2,11 @@
 
 {{#if isSent}}
   <div class="isSent">
-    The message has been sent!
-    {{#if fileName}}
-      File {{fileName}} has been saved!
+    <p>The message has been sent!</p>
+    {{#if image}}
+      <div class="uploaded">
+        <img src="/uploads/{{image}}" alt="Uploaded Image">
+      </div>
     {{/if}}
   </div>
 {{/if}}
@@ -29,7 +31,7 @@
     Message: <textarea name="message"></textarea>
   </label>
   <label>
-    Project design: <input type="file" name="projectDesign" accept="image/png, image/jpeg, image/jpg, image/gif">
+    Project design: <input type="file" name="image" accept="image/png, image/jpeg, image/jpg, image/gif">
   </label>
   <button type="submit">Send message</button>
 </form>

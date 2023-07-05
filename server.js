@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const hbs = require('express-handlebars');
 const multer = require('multer');
+const fs = require('fs');
+const mime = require('mime-types');
 
 const app = express();
 
@@ -13,7 +15,17 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads');
+  },
+  filename: (req, file, cb) => {
+    const extension = mime.extension(file.mimetype);
+    cb(null, Date.now() + '.' + extension);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 app.get('/', (req, res) => {
   res.render('index');
@@ -41,19 +53,15 @@ app.get('/hello/:name', (req, res) => {
   res.render('hello', { name: uppName });
 });
 
-app.post('/contact/send-message', upload.single('projectDesign'), (req, res) => {
-
+app.post('/contact/send-message', upload.single('image'), (req, res) => {
   const { author, sender, title, message } = req.body;
-  const projectDesign = req.file;
+  const image = req.file;
 
-  if (author && sender && title && message && projectDesign) {
-    const fileName = projectDesign.originalname;
-    res.render('contact', { isSent: true, fileName });
-  }
-  else {
+  if (author && sender && title && message && image) {
+    res.render('contact', { isSent: true, image: image.filename });
+  } else {
     res.render('contact', { isError: true });
   }
-
 });
 
 app.use((req, res) => {
