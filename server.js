@@ -32,6 +32,12 @@ app.get('/history', (req, res) => {
   res.show('history.html');
 });
 
+app.get('/hello/:name', (req, res) => {
+  const reqName = req.params.name;
+  const uppName = reqName.charAt(0).toUpperCase() + reqName.slice(1);
+  res.send(`Witaj ${uppName}`);
+});
+
 app.use((req, res) => {
   res.status(404).send('404 not found...');
 })
